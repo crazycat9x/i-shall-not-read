@@ -17,8 +17,8 @@ function waitForFB(watch, callback) {
 				mutation.type === "attributes" &&
 				watch.classList.contains("async_saving")
 			) {
-                observer.disconnect()
-                callback()
+				observer.disconnect();
+				callback();
 			}
 		});
 	});
@@ -35,8 +35,12 @@ function wpm(wordCount) {
 
 function addReadingTime(target) {
 	const posts = target.getElementsByClassName("text_exposed_root");
-	console.log(target, posts, posts.length)
-	if(posts.length === 0) { return }
+	if (!posts) {
+		return;
+	}
+	if (posts.length === 0) {
+		return;
+	}
 	for (o of posts) {
 		const wordCount = Array.from(o.getElementsByTagName("p")).reduce(
 			(accumulator, currentValue) => {
@@ -47,7 +51,7 @@ function addReadingTime(target) {
 		const time = wpm(wordCount);
 		o.getElementsByClassName(
 			"see_more_link_inner"
-		)[0].innerText += ` estimate reading time ${time.minutes}m ${
+		)[0].innerText = `...estimated reading time ${time.minutes}m ${
 			time.seconds
 		}s`;
 	}
