@@ -35,12 +35,10 @@ function wpm(wordCount) {
 
 function addReadingTime(target) {
 	const posts = target.getElementsByClassName("text_exposed_root");
-	if (!posts) {
+	if (posts === undefined || posts === null || posts.length === 0) {
 		return;
 	}
-	if (posts.length === 0) {
-		return;
-	}
+	console.log(posts)
 	for (o of posts) {
 		const wordCount = Array.from(o.getElementsByTagName("p")).reduce(
 			(accumulator, currentValue) => {
@@ -59,8 +57,13 @@ function addReadingTime(target) {
 
 function main() {
 	const feed = document.querySelector("[role='feed']");
-	addReadingTime(feed);
 	const postStream = feed.lastChild.firstChild;
+	if (postStream === undefined || postStream === null) {
+		setTimeout(main, 500);
+		return;
+	}
+	console.log(postStream)
+	addReadingTime(feed);
 	const asyncWatch = feed.lastChild.lastChild;
 	const observer = new MutationObserver(mutationsList =>
 		mutationsList.forEach(mutation =>
