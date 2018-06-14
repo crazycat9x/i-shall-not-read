@@ -15,7 +15,7 @@ function waitForFB(watch, callback) {
 		mutationsList.forEach(mutation => {
 			if (
 				mutation.type === "attributes" &&
-				watch.classList.contains("async_saving")
+				!watch.classList.contains("async_saving")
 			) {
 				observer.disconnect();
 				callback();
