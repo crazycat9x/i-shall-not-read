@@ -10,21 +10,21 @@ function ready(fn) {
 	}
 }
 
-// function waitForFB(watch, callback) {
-// 	const observer = new MutationObserver(mutationsList => {
-// 		mutationsList.forEach(mutation => {
-// 			if (
-// 				mutation.type === "attributes" &&
-// 				watch.classList.contains("async_saving")
-// 			) {
-// 				observer.disconnect();
-// 				callback();
-// 			}
-// 		});
-// 	});
-// 	const config = { attributes: true, childList: false, subtree: false };
-// 	observer.observe(watch, config);
-// }
+function waitForFB(watch, callback) {
+	const observer = new MutationObserver(mutationsList => {
+		mutationsList.forEach(mutation => {
+			if (
+				mutation.type === "attributes" &&
+				watch.classList.contains("async_saving")
+			) {
+				observer.disconnect();
+				callback();
+			}
+		});
+	});
+	const config = { attributes: true, childList: false, subtree: false };
+	observer.observe(watch, config);
+}
 
 function wpm(wordCount) {
 	const totalSeconds = wordCount / 3;
@@ -35,8 +35,7 @@ function wpm(wordCount) {
 
 function addReadingTime(target) {
 	const posts = target.getElementsByClassName("text_exposed_root");
-	console.log(posts, posts.length)
-	if (posts == undefined) {
+	if (!posts) {
 		return;
 	}
 	if (posts.length === 0) {
@@ -60,19 +59,12 @@ function addReadingTime(target) {
 
 function main() {
 	const feed = document.querySelector("[role='feed']");
-	const postStream = feed.lastChild.firstChild;
-	if (!postStream) {
-		setTimeout(main,200)
-		return
-	}
 	addReadingTime(feed);
-	// const asyncWatch = feed.lastChild.lastChild;
+	const postStream = feed.lastChild.firstChild;
+	const asyncWatch = feed.lastChild.lastChild;
 	const observer = new MutationObserver(mutationsList =>
 		mutationsList.forEach(mutation =>
-			{
-				console.log(mutation.addedNodes[0])
-				setTimeout(() => addReadingTime(mutation.addedNodes[0]), 1000)
-			}
+			waitForFB(asyncWatch, () => addReadingTime(mutation.addedNodes[0]))
 		)
 	);
 	const config = { attributes: false, childList: true, subtree: false };
