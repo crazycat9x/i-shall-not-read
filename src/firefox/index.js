@@ -38,7 +38,7 @@ function addReadingTime(target) {
 	if (posts === undefined || posts === null || posts.length === 0) {
 		return;
 	}
-	console.log(posts)
+	console.log(posts);
 	for (o of posts) {
 		const wordCount = Array.from(o.getElementsByTagName("p")).reduce(
 			(accumulator, currentValue) => {
@@ -62,7 +62,7 @@ function main() {
 		setTimeout(main, 500);
 		return;
 	}
-	console.log(postStream)
+	console.log(postStream);
 	addReadingTime(feed);
 	const asyncWatch = feed.lastChild.lastChild;
 	const observer = new MutationObserver(mutationsList =>
