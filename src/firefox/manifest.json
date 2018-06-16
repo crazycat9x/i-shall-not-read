@@ -1,16 +1,18 @@
 {
+	"manifest_version": 2,
+	"name": "I shall not read!",
+	"version": "1.0",
 
-    "manifest_version": 2,
-    "name": "I shall not read!",
-    "version": "1.0",
-  
-    "description": "Show estimate reading time of facebook post before expand.",
-  
-    "content_scripts": [
-      {
-        "matches": ["*://*.facebook.com/*"],
-        "js": ["index.js"]
-      }
-    ]
-  
-  }
+	"description": "Show estimate reading time of facebook post before expand.",
+
+	"content_scripts": [
+		{
+			"matches": ["*://*.facebook.com/*"],
+			"js": ["index.js"]
+		}
+	],
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"permissions": ["tabs", "activeTab"]
+}

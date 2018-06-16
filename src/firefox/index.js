@@ -55,23 +55,48 @@ function addReadingTime(target) {
 	}
 }
 
-function main() {
+function observeMainPage() {
 	const feed = document.querySelector("[role='feed']");
 	const postStream = feed.lastChild.firstChild;
 	if (postStream === undefined || postStream === null) {
-		setTimeout(main, 500);
-		return;
+		throw "couldn't get feed";
 	}
 	console.log(postStream);
 	addReadingTime(feed);
 	const asyncWatch = feed.lastChild.lastChild;
 	const observer = new MutationObserver(mutationsList =>
-		mutationsList.forEach(mutation =>
-			waitForFB(asyncWatch, () => addReadingTime(mutation.addedNodes[0]))
-		)
+		mutationsList.forEach(mutation => {
+			waitForFB(asyncWatch, () => addReadingTime(mutation.addedNodes[0]));
+		})
 	);
 	const config = { attributes: false, childList: true, subtree: false };
 	observer.observe(postStream, config);
+	return observer;
+}
+
+function main() {
+	let mainpageObserver;
+	let success = false;
+	function tryBlock() {
+		try {
+			mainpageObserver = observeMainPage();
+			success = true;
+		} catch (e) {
+			success = false;
+			setTimeout(main, 500);
+		}
+	}
+	tryBlock();
+	console.log(mainpageObserver);
+	const urlListener = request => {
+		if (request.type === "urlChange" && success === true) {
+			console.log("change");
+			success = false;
+			mainpageObserver.disconnect();
+			tryBlock();
+		}
+	};
+	browser.runtime.onMessage.addListener(urlListener);
 }
 
 ready(main);
