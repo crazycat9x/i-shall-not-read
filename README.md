@@ -3,7 +3,7 @@ A Chrome/Firefox extension that show you Facebook post estimated reading time be
 
 ### The main focus of this project is to detect Facebook application dynamic changes:
 * Detection of new posts being added to the news feed
-* Add an observer to each loading post to determine when post finish loading 
+* Add an observer with callback to each loading post to determine when post finish loading and apply the callback to it
 * Implement background process that listens to URL changes and emits events to content script
 * Initialization and termination of event listeners and observers when switching between pages
 

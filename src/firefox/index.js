@@ -11,12 +11,15 @@ function ready(fn) {
 }
 
 function waitForFB(watch, callback) {
+  // observe when post finish loading
   const observer = new MutationObserver(mutationsList => {
     mutationsList.forEach(mutation => {
+      // the "async_saving" class indicate loading post
       if (
         mutation.type === "attributes" &&
         !watch.classList.contains("async_saving")
       ) {
+        // if post finish loading, then disconnect the observer and call the callback
         observer.disconnect();
         callback();
       }
@@ -56,6 +59,7 @@ function addReadingTime(target) {
 }
 
 function observeMainPage() {
+  // get the post stream
   const feed = document.querySelector("[role='feed']");
   const postStream = feed.lastChild.firstChild;
   if (postStream === undefined || postStream === null) {
@@ -63,9 +67,12 @@ function observeMainPage() {
   }
   console.log(postStream);
   addReadingTime(feed);
+  // get fb placeholder for loading post
   const asyncWatch = feed.lastChild.lastChild;
+  // set up an observer which detect newly added posts
   const observer = new MutationObserver(mutationsList =>
     mutationsList.forEach(mutation => {
+      // call waitForFB on add posts, pass in the loading placeholder and a callback
       waitForFB(asyncWatch, () => addReadingTime(mutation.addedNodes[0]));
     })
   );
@@ -77,8 +84,10 @@ function observeMainPage() {
 function main() {
   let mainpageObserver;
   let success = false;
+  // try setting up an observer every 1/2 sec
   function tryBlock() {
     try {
+      // if found call observeMainPage() which will return an observer
       mainpageObserver = observeMainPage();
       success = true;
     } catch (e) {
@@ -89,6 +98,7 @@ function main() {
   tryBlock();
   console.log(mainpageObserver);
   const urlListener = request => {
+    // if page change => disconnect old observer and try set up a new one
     if (request.type === "urlChange" && success === true) {
       console.log("change");
       success = false;
