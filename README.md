@@ -1,6 +1,8 @@
 # i-shall-not-read
 A Chrome/Firefox extension that show you Facebook post estimated reading time before having to open them.
 
+<img height="250" src="./docs/example.png">
+
 ### The main focus of this project is to detect Facebook application dynamic changes:
 * Detection of new posts being added to the news feed
 * Add an observer with callback to each loading post to determine when post finish loading and apply the callback to it
