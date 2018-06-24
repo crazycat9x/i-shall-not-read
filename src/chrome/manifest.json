@@ -1,0 +1,16 @@
+{
+  "name": "I shall not read!",
+  "version": "1.0",
+  "description": "Show estimate reading time of facebook post before expand.",
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": ["*://*.facebook.com/*"],
+      "js": ["index.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["tabs", "activeTab"]
+}
