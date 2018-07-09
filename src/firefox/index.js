@@ -10,6 +10,10 @@ function ready(fn) {
   }
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function waitForFB(watch, callback) {
   // observe when post finish loading
   const observer = new MutationObserver(mutationsList => {
@@ -85,14 +89,15 @@ function main() {
   let mainpageObserver;
   let success = false;
   // try setting up an observer every 1/2 sec
-  function tryBlock() {
+  async function tryBlock() {
     try {
       // if found call observeMainPage() which will return an observer
       mainpageObserver = observeMainPage();
       success = true;
     } catch (e) {
       success = false;
-      setTimeout(main, 500);
+      await sleep(500);
+      tryBlock();
     }
   }
   tryBlock();
