@@ -45,7 +45,6 @@ function addReadingTime(target) {
   if (posts === undefined || posts === null || posts.length === 0) {
     return;
   }
-  console.log(posts);
   for (o of posts) {
     const wordCount = Array.from(o.getElementsByTagName("p")).reduce(
       (accumulator, currentValue) => {
@@ -56,9 +55,7 @@ function addReadingTime(target) {
     const time = wpm(wordCount);
     o.getElementsByClassName(
       "see_more_link_inner"
-    )[0].innerText = `...estimated reading time ${time.minutes}m ${
-      time.seconds
-    }s`;
+    )[0].innerText = `...estimated reading time ${time.minutes}m ${time.seconds}s`;
   }
 }
 
@@ -69,7 +66,6 @@ function observeMainPage() {
   if (postStream === undefined || postStream === null) {
     throw "couldn't get feed";
   }
-  console.log(postStream);
   addReadingTime(feed);
   // get fb placeholder for loading post
   const asyncWatch = feed.lastChild.lastChild;
@@ -101,11 +97,9 @@ function main() {
     }
   }
   tryBlock();
-  console.log(mainpageObserver);
   const urlListener = request => {
     // if page change => disconnect old observer and try set up a new one
     if (request.type === "urlChange" && success === true) {
-      console.log("change");
       success = false;
       mainpageObserver.disconnect();
       tryBlock();
